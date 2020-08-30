@@ -48,7 +48,7 @@ const keleponReducer = (state = initialKeleponState, action) => {
     }
 }
 
-//Combine Reducer
+//Cool Combine Reducer 
 const rootReducer = combineReducers({
     kelepon: keleponReducer,
     cake: cakeReducer
