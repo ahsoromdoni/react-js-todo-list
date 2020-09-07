@@ -1,8 +1,10 @@
-const { createStore } = require("redux")
+const { createStore, combineReducers, applyMiddleware } = require("redux")
+const { logger } = require('redux-logger')
 
 const BUY_CAKE = 'BUY_CAKE'
 const BUY_KELEPON = 'BUY_KELEPON'
 
+//action
 function buyCake() {
     return {
         type: BUY_CAKE,
@@ -10,6 +12,7 @@ function buyCake() {
     }
 }
 
+//action
 function buyKelepon() {
     return {
         type: BUY_KELEPON,
@@ -17,19 +20,28 @@ function buyKelepon() {
     }
 }
 
-const initialState = {
-    numOfCakes: 10,
+const initialCakeState = {
+    numOfCakes: 10
+}
+
+const initialKeleponState = {
     numOfKelepon: 20
 }
 
 //(previousState, action) => newState
-const reducer = (state = initialState, action) => {
+const cakeReducer = (state = initialCakeState, action) => {
     switch (action.type) {
         case BUY_CAKE: return {
             ...state,
             numOfCakes: state.numOfCakes - 1
         }
 
+        default: return state
+    }
+}
+
+const keleponReducer = (state = initialKeleponState, action) => {
+    switch (action.type) {
         case BUY_KELEPON: return {
             ...state,
             numOfKelepon: state.numOfKelepon - 1
@@ -39,9 +51,16 @@ const reducer = (state = initialState, action) => {
     }
 }
 
-const store = createStore(reducer)
+//Cool Combine Reducer 
+const rootReducer = combineReducers({
+    kelepon: keleponReducer,
+    cake: cakeReducer
+})
+
+
+const store = createStore(rootReducer, applyMiddleware(logger))
 console.log('Initial state', store.getState())
-const unsubscribe = store.subscribe(() => console.log('Update state', store.getState()))
+const unsubscribe = store.subscribe(() => { })
 store.dispatch(buyCake())
 store.dispatch(buyCake())
 store.dispatch(buyCake())
